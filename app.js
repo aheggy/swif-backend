@@ -14,6 +14,9 @@ app.get("*", (req, res) => {
     res.send("Welcome to the SWIF App");
 });
 
+const usersController = require("./controllers/usersController.js");
+app.use("/users", usersController);
+
 // 404 PAGE
 app.get("*", (req, res) => {
     res.status(404).send("Page not found");
