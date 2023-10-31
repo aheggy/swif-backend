@@ -11,13 +11,13 @@ app.use(express.json());
 
 // ROUTES
 app.get("*", (req, res) => {
-    res.status(404).send("Page not found");
+    res.send("Welcome to the SWIF App");
 });
 
 // 404 PAGE
 app.get("*", (req, res) => {
     res.status(404).send("Page not found");
   });
-  
+
 // EXPORT
 module.exports = app;
