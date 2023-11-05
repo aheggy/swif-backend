@@ -4,28 +4,38 @@ CREATE DATABASE swif_db;
 \c swif_db
 
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS subjects;
-DROP TABLE IF EXISTS study_sessions;
-DROP TABLE IF EXISTS connections;
-DROP TABLE IF EXISTS user_subjects;
+DROP TABLE IF EXISTS messages;
+-- DROP TABLE IF EXISTS subjects;
+-- DROP TABLE IF EXISTS study_sessions;
+-- DROP TABLE IF EXISTS connections;
+-- DROP TABLE IF EXISTS user_subjects;
 
 
 CREATE TABLE users (
  id SERIAL PRIMARY KEY,
  first_name TEXT,
  last_name TEXT,
- username TEXT,
  email TEXT,
- gender TEXT,
- age INTEGER,
-country TEXT,
-city TEXT,
-profile_image_url TEXT,
-bio TEXT,
-contact_info TEXT,
-subject_interest TEXT
+ password_hash VARCHAR(255) NOT NULL
 );
+--  gender TEXT,
+--  age INTEGER,
+-- country TEXT,
+-- city TEXT,
+-- profile_image_url TEXT,
+-- bio TEXT,
+-- contact_info TEXT,
+-- subject_interest TEXT
 
+CREATE TABLE messages (
+    sender_id INTEGER REFERENCES users(id),
+    receiver_id INTEGER REFERENCES users(id),
+    message_content TEXT,
+    timestamp TIMESTAMP
+)
+
+
+/*
 
 CREATE TABLE subjects (
   subject_id SERIAL PRIMARY KEY,
@@ -58,8 +68,7 @@ CREATE TABLE user_subjects (
   subject_id INTEGER REFERENCES subjects(subject_id)
 );
 
-
-
+*/
 
 
 

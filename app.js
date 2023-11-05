@@ -1,6 +1,8 @@
 // DEPENDENCIES
 const cors = require("cors");
 const express = require("express");
+const passport = require("passport")
+const usersController = require("./controllers/usersController.js");
 
 // CONFIGURATION
 const app = express();
@@ -14,8 +16,12 @@ app.get("/", (req, res) => {
     res.send("Welcome to the SWIF App");
 });
 
-const usersController = require("./controllers/usersController.js");
-app.use("/users", usersController);
+// Signup route
+app.post("/signup", usersController.createUser);
+
+// Login route
+app.post("/login", usersController.loginUser);
+
 
 // 404 PAGE
 app.get("*", (req, res) => {
