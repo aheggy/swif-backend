@@ -24,7 +24,8 @@ CREATE TABLE
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users (id),
     token TEXT,
-    status INTEGER NOT NULL
+    status INTEGER NOT NULL,
+    created_at DATE DEFAULT now()
   )
   --  gender TEXT,
   --  age INTEGER,

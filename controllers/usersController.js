@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const users = require('../queries/users');
 
 /**
@@ -7,6 +8,11 @@ const users = require('../queries/users');
  * @returns {Promise} A promise that resolves with the result of the user creation process.
  */
 const createUser = async (req, res) => {
+    const errors=validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+
     const { first_name, last_name, email, password } = req.body;
 
     try {
@@ -25,6 +31,11 @@ const createUser = async (req, res) => {
  * @returns {Promise} A promise that resolves with the result of the user login process.
  */
 const loginUser = async (req, res) => {
+    const errors=validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+    
     const { email, password } = req.body;
 
     try {

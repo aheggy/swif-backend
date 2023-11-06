@@ -1,4 +1,5 @@
 const db = require("../db/dbConfig");
+const jwt = require("jsonwebtoken");
 
 /**
  * Validates the token from the request headers and checks its validity in the database.
@@ -7,13 +8,19 @@ const db = require("../db/dbConfig");
  * @param {Function} next - The next function to be called in the middleware chain.
  * @returns {Promise} A promise that resolves with the result of token validation.
  */
-export const validateToken = async (req, res, next) => {
+const validateToken = async (req, res, next) => {
 	const token =
 		req.headers["authorization"] &&
 		req.headers["authorization"].split(" ")[1];
 	if (!token) {
 		return res.status(401).json({ error: "Token missing" });
 	}
+
+	jwt.verify(token,"your_secret_key",(err,decoded)=>{
+		if(err){
+            return res.status(401).json({error:err.message})
+        }
+	})
 
 	try {
 		const result = await validateTokenFromDB(token);
@@ -51,4 +58,4 @@ const validateTokenFromDB = async (token) => {
 	}
 };
 
-module.exports = { validateToken, validateTokenFromDB };
+module.exports = { validateToken };
