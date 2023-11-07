@@ -26,7 +26,8 @@ CREATE TABLE
     token TEXT,
     status INTEGER NOT NULL,
     created_at DATE DEFAULT now()
-  )
+  );
+
   --  gender TEXT,
   --  age INTEGER,
   -- country TEXT,
@@ -35,13 +36,16 @@ CREATE TABLE
   -- bio TEXT,
   -- contact_info TEXT,
   -- subject_interest TEXT
+
 CREATE TABLE
   messages (
     sender_id INTEGER REFERENCES users (id),
     receiver_id INTEGER REFERENCES users (id),
     message_content TEXT,
     timestamp TIMESTAMP
-  )
+  );
+
+
   /*
   
   CREATE TABLE subjects (
