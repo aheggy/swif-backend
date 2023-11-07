@@ -13,9 +13,10 @@ CREATE DATABASE swif_db;
 CREATE TABLE
   users (
     id SERIAL PRIMARY KEY,
-    first_name TEXT,
-    last_name TEXT,
-    email TEXT,
+    first_name TEXT  NOT NULL,
+    last_name TEXT  NOT NULL,
+    country VARCHAR(255)  NOT NULL,
+    email TEXT  NOT NULL,
     password_hash VARCHAR(255) NOT NULL
   );
 
@@ -23,7 +24,7 @@ CREATE TABLE
   users_logins (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users (id),
-    token TEXT,
+    token TEXT NOT NULL,
     status INTEGER NOT NULL,
     created_at DATE DEFAULT now()
   );

@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
  * @returns {Promise<Object>} A promise that resolves when the user is created.
  * @throws Will throw an error if any required field is missing or if a user with the same email already exists.
  */
-const createUser = async (first_name, last_name, email, password) => {
+const createUser = async (first_name, last_name, country, email, password) => {
 	try {
 		if (!first_name || !last_name || !email || !password) {
 			throw new Error("Missing required fields");
@@ -28,8 +28,8 @@ const createUser = async (first_name, last_name, email, password) => {
 		const hashedPassword = await bcrypt.hash(password, 12);
 
 		const newUser = await db.one(
-			"INSERT INTO users (first_name, last_name, email, password_hash) VALUES ($1, $2, $3, $4) RETURNING id",
-			[first_name, last_name, email, hashedPassword]
+			"INSERT INTO users (first_name, last_name, country, email, password_hash) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+			[first_name, last_name, country, email, hashedPassword]
 		);
 
 		return { message: "User created", user_id: newUser.id };

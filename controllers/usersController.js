@@ -13,10 +13,11 @@ const createUser = async (req, res) => {
         return res.status(400).json({errors:errors.array()})
     }
 
-    const { first_name, last_name, email, password } = req.body;
+
+    const { first_name, last_name, country, email, password } = req.body;
 
     try {
-        const result = await users.createUser(first_name, last_name, email, password);
+        const result = await users.createUser(first_name, last_name, country, email, password);
         res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
