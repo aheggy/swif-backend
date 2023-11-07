@@ -81,6 +81,7 @@ const loginUser = async (email, password) => {
  * @param {string} token - The authentication token to be saved.
  * @throws Will throw an error if the token saving process fails.
  */
+
 const saveToken = async (userId, token) => {
 	try {
 		await db.none(
