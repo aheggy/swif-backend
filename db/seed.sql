@@ -41,5 +41,7 @@
 --     (1, 2, 1, '2023-10-30 10:00:00', '2023-10-30 12:00:00', 'Scheduled'),
 --     (3, 4, 2, '2023-11-01 14:00:00', '2023-11-01 16:00:00', 'In Progress');
 
--- INSERT INTO messages (sender_id, receiver_id, message_content, timestamp)
--- VALUES (1, 2, 'Hello, how are you?', '2023-10-26 15:30:00');
+
+INSERT INTO messages (sender_id, receiver_id, message_content, timestamp)
+VALUES  (1, 2, 'Hello, how are you?', '2023-10-26 15:30:00'),
+        (2, 1, "I'm fine, Thank you", '2023-10-26 15:31:00');

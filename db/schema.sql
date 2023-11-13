@@ -15,7 +15,7 @@ CREATE TABLE users (
  id SERIAL PRIMARY KEY,
  first_name TEXT,
  last_name TEXT,
- email TEXT,
+ username TEXT,
  password_hash VARCHAR(255) NOT NULL
 );
 --  gender TEXT,
@@ -28,11 +28,12 @@ CREATE TABLE users (
 -- subject_interest TEXT
 
 CREATE TABLE messages (
-    sender_id INTEGER REFERENCES users(id),
-    receiver_id INTEGER REFERENCES users(id),
-    message_content TEXT,
-    timestamp TIMESTAMP
-)
+  message_id SERIAL PRIMARY KEY,
+  sender_id INTEGER REFERENCES users(id),
+  recipient_id INTEGER REFERENCES users(id),
+  message_content TEXT,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 
 /*
