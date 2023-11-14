@@ -39,8 +39,7 @@ app.post("/login", (req, res) => {
 
 
 app.get("/people", usersController.people)
-// inbox route
-// app.post("/inbox", usersController);
+
 
 
 app.post('/messages', usersController.authenticateToken, messagesController.createMessage);
