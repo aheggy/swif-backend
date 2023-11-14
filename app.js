@@ -30,6 +30,7 @@ app.post("/signup", (req, res) => {
 // Login route
 app.post("/login", (req, res) => {
   console.log("Request Body: ", req.body)
+  usersController.loginUser(req, res)
 });
 
 
