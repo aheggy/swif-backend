@@ -1,19 +1,16 @@
-const db = require("../db/dbConfig");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const db = require('../db/dbConfig');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-const createUserQuery = async ({ first_name, last_name, username, password }) => {
-  console.log(first_name, last_name, username, password)
+const createUser = async (first_name, last_name, email, password) => {
+  console.log(first_name, last_name)
+  
   try {
-    const existingUser = await db.oneOrNone("SELECT * FROM users WHERE username = $1", [username]);
-    if (existingUser) {
-      throw new Error("User with this username already exists");
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await db.one(
-      "INSERT INTO users (first_name, last_name, username, password_hash) VALUES ($1, $2, $3, $4) RETURNING id",
-      [first_name, last_name, username, hashedPassword]
+      'INSERT INTO users (first_name, last_name, email, password_hash) VALUES ($1, $2, $3, $4) RETURNING id',
+      [first_name, last_name, email, hashedPassword]
     );
 
     return newUser;

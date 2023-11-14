@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const users = require('../queries/users');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
