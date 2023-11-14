@@ -1,8 +1,5 @@
 const { createMessageQuery, getMessagesByUserIdQuery } = require('../queries/messages');
 
-
-
-
 const messagesController = {
   createMessage: async (req, res) => {
     console.log("body", req.body)
