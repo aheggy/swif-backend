@@ -7,7 +7,7 @@ const messagesController = {
     const {recipient_id, message_content } = req.body;
 
     try {
-      await messages.createMessageQuery(sender_id, recipient_id, message_content);
+      await createMessageQuery(sender_id, recipient_id, message_content);
       res.status(201).json({ message: "Message sent successfully" });
     } catch (error) {
       console.error("Error creating message:", error);
