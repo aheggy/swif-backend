@@ -49,8 +49,6 @@ app.get('/messages', usersController.authenticateToken, messagesController.getMe
 //   messagesController.createMessage(req, res);
 // });
 
-// Logout route
-app.post("/logout",validateToken, usersController.logOutUser);
 
 // 404 PAGE
 app.get("*", (req, res) => {
