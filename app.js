@@ -25,16 +25,11 @@ app.post("/signup", (req, res) => {
   usersController.createUser(req, res);
 });
 
-// app.post("/test", (req, res) => {
-//   console.log("Test endpoint hit. Body:", req.body);
-//   res.status(200).json({ message: "Test endpoint hit", body: req.body });
-// });
 
 
 // Login route
 app.post("/login", (req, res) => {
   console.log("Request Body: ", req.body)
-  usersController.loginUser(req, res)
 });
 
 
@@ -51,7 +46,7 @@ app.get('/messages', usersController.authenticateToken, messagesController.getMe
 
 
 // 404 PAGE
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
     res.status(404).send("Page not found");
   });
 
