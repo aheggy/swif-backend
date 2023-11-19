@@ -3,8 +3,8 @@ DROP DATABASE IF EXISTS swif_db;
 CREATE DATABASE swif_db;
 
 \c swif_db
--- DROP TABLE IF EXISTS users;
--- DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS messages;
 -- DROP TABLE IF EXISTS subjects;
 -- DROP TABLE IF EXISTS study_sessions;
 -- DROP TABLE IF EXISTS connections;
@@ -12,10 +12,9 @@ CREATE DATABASE swif_db;
 
 
 CREATE TABLE users (
- id SERIAL PRIMARY KEY,
+ username TEXT PRIMARY KEY,
  first_name TEXT,
  last_name TEXT,
- username TEXT,
  password_hash VARCHAR(255) NOT NULL
 );
 --  gender TEXT,
@@ -29,8 +28,8 @@ CREATE TABLE users (
 
 CREATE TABLE messages (
   message_id SERIAL PRIMARY KEY,
-  sender_id INTEGER REFERENCES users(id),
-  recipient_id INTEGER REFERENCES users(id),
+  sender_username TEXT REFERENCES users(username),
+  recipient_username TEXT REFERENCES users(username),
   message_content TEXT,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

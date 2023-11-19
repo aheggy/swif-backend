@@ -1,44 +1,47 @@
 // DEPENDENCIES
+const http = require('http');
+const socketIO = require('socket.io');
 const app = require("./app.js");
-// const app = require('express')();
-const http = require('http'); // You need to require the 'http' module
-
-// SOCKET.IO INITIALIZATION
-const server = http.createServer(app); // Use a different variable name here
-const io = require('socket.io')(server);
+const createMessage = require("./queries/messages"); 
 
 // CONFIGURATION
 require("dotenv").config();
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
+
+// SERVER
+const server = http.createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
 
 // SOCKET.IO EVENT LISTENERS
 io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+  console.log('Client connected:', socket.id);
 
-    // Handle message events
-    socket.on('new_message', async (data) => {
-        const { senderId, recipientId, text } = data;
+  socket.on('join_room', (room) => {
+    socket.join(room);
+  });
 
-        // Store message in the database
-        try {
-            await messages.createMessage(senderId, recipientId, text);
-            // Emit the message to all clients
-            io.emit('new_message', { senderId, recipientId, text });
-        } catch (error) {
-            console.error('Error saving message:', error);
-            // Handle error (e.g., send error to the sender)
-        }
-    });
+  socket.on('new_message', async (data) => {
+    const { sender_username, recipient_username, text } = data;
+    try {
+      const message = await createMessage(sender_username, recipient_username, text);
+      io.to(sender_username).to(recipient_username).emit('new_message', message);
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+  });
 
-    // Handle client disconnections
-    socket.on('disconnect', () => {
-        console.log('Client disconnected:', socket.id);
-        // Handle disconnection (e.g., update user status)
-    });
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+  });
 });
 
 // LISTEN
 server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });
-
