@@ -1,10 +1,10 @@
 const db = require("../db/dbConfig");
 
-const createMessageQuery = async (senderId, recipientId, messageContent) => {
-  const query = `INSERT INTO messages (sender_id, recipient_id, message_content)
+const createMessageQuery = async (senderUsername, recipientUsername, messageContent) => {
+  const query = `INSERT INTO messages (sender_username, recipient_username, message_content)
                  VALUES ($1, $2, $3) RETURNING *`; 
 
-  const values = [senderId, recipientId, messageContent];
+  const values = [senderUsername, recipientUsername, messageContent];
 
   try {
       const message = await db.one(query, values);
@@ -15,9 +15,9 @@ const createMessageQuery = async (senderId, recipientId, messageContent) => {
 };
 
 
-const getMessagesByUserIdQuery = async (userId) => {
-  const query = 'SELECT * FROM messages WHERE sender_id = $1 OR recipient_id = $1 ORDER BY timestamp DESC';
-  const values = [userId];
+const getMessagesByUsernameQuery = async (username) => {
+  const query = 'SELECT * FROM messages WHERE sender_username = $1 OR recipient_username = $1 ORDER BY timestamp DESC';
+  const values = [username];
   
   try {
     const result = await db.query(query, values);
@@ -27,4 +27,4 @@ const getMessagesByUserIdQuery = async (userId) => {
   }
 }
 
-module.exports = { createMessageQuery, getMessagesByUserIdQuery };
+module.exports = { createMessageQuery, getMessagesByUsernameQuery };
