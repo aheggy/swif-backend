@@ -16,7 +16,7 @@ const createMessageQuery = async (senderUsername, recipientUsername, messageCont
 
 
 const getMessagesByUsernameQuery = async (username) => {
-  const query = 'SELECT * FROM messages WHERE sender_username = $1 OR recipient_username = $1 ORDER BY timestamp DESC';
+  const query = 'SELECT * FROM messages WHERE sender_username = $1 OR recipient_username = $1 ORDER BY timestamp ASC';
   const values = [username];
   
   try {
