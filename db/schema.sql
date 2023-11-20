@@ -12,19 +12,19 @@ DROP TABLE IF EXISTS messages;
 
 
 CREATE TABLE users (
- username TEXT PRIMARY KEY,
- first_name TEXT,
- last_name TEXT,
- password_hash VARCHAR(255) NOT NULL
+  username TEXT PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT,
+  password_hash VARCHAR(255) NOT NULL,
+  gender TEXT,
+  age INTEGER,
+  country TEXT,
+  city TEXT,
+  profile_image_url TEXT,
+  bio TEXT,
+  contact_info TEXT,
+  subject_interest TEXT
 );
---  gender TEXT,
---  age INTEGER,
--- country TEXT,
--- city TEXT,
--- profile_image_url TEXT,
--- bio TEXT,
--- contact_info TEXT,
--- subject_interest TEXT
 
 CREATE TABLE messages (
   message_id SERIAL PRIMARY KEY,
