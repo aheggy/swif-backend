@@ -3,8 +3,8 @@ DROP DATABASE IF EXISTS swif_db;
 CREATE DATABASE swif_db;
 
 \c swif_db
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS messages;
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS messages;
 -- DROP TABLE IF EXISTS subjects;
 -- DROP TABLE IF EXISTS study_sessions;
 -- DROP TABLE IF EXISTS connections;
@@ -34,14 +34,15 @@ CREATE TABLE messages (
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
-  /*
-  
   CREATE TABLE subjects (
   subject_id SERIAL PRIMARY KEY,
   subject_name TEXT,
   description TEXT
   );
+  
+
+  
+  /*
   
   CREATE TABLE study_sessions (
   session_id SERIAL PRIMARY KEY,

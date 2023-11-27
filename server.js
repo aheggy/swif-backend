@@ -49,6 +49,38 @@ io.on('connection', (socket) => {
         }
     });
 
+
+    // WebRTC Signaling
+    socket.on('webrtc_offer', (data) => {
+        const recipientSocket = userSockets[data.recipient_username];
+        if (recipientSocket) {
+            io.to(recipientSocket).emit('webrtc_offer', {
+                sdp: data.sdp,
+                sender_username: data.sender_username
+            });
+        }
+    });
+
+    socket.on('webrtc_answer', (data) => {
+        const recipientSocket = userSockets[data.recipient_username];
+        if (recipientSocket) {
+            io.to(recipientSocket).emit('webrtc_answer', {
+                sdp: data.sdp,
+                sender_username: data.sender_username
+            });
+        }
+    });
+
+    socket.on('webrtc_ice_candidate', (data) => {
+        const recipientSocket = userSockets[data.recipient_username];
+        if (recipientSocket) {
+            io.to(recipientSocket).emit('webrtc_ice_candidate', {
+                candidate: data.candidate,
+                sender_username: data.sender_username
+            });
+        }
+    });
+
     socket.on('disconnect', () => {
         // Remove socket ID from userSockets
         for (let username in userSockets) {
