@@ -3,6 +3,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const app = require("./app.js");
 const {createMessageQuery} = require("./queries/messages"); 
+const { version } = require('os');
 
 // CONFIGURATION
 require("dotenv").config();
@@ -12,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'https://swif.onrender.com',
+    origin: 'https://swif.onrender.com', // Frontend URL
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -20,72 +21,73 @@ const io = socketIO(server, {
 
 // SOCKET.IO EVENT LISTENERS
 const userSockets = {};  // Object to map usernames to socket IDs
-
 io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+    console.log('A user connected:', socket.id);
 
+    // User registration
     socket.on('register', (username) => {
+        console.log(`Registering user: ${username} with socket ID: ${socket.id}`);
         userSockets[username] = socket.id;
+
+       
+        socket.emit('registration_successful', `Registered as ${username}`);
     });
 
-    socket.on('new_message', async (data) => {
+    // Sending a new message
+    socket.on('new_message', (data) => {
         const { sender_username, recipient_username, text } = data;
+        console.log(`Received message from ${sender_username} to ${recipient_username}: ${text}`);
+        console.log("userSockets", userSockets);
 
-        try {
-            const savedMessage = await createMessageQuery(sender_username, recipient_username, text);
-            console.log('Emitting message:', savedMessage);
-
-            const senderSocket = userSockets[sender_username];
-            const recipientSocket = userSockets[recipient_username];
-
-            if (senderSocket) {
-                io.to(senderSocket).emit('new_message', savedMessage);
-            }
-            if (recipientSocket) {
-                io.to(recipientSocket).emit('new_message', savedMessage);
-            }
-        } catch (error) {
-            console.error('Error saving message:', error);
-        }
-    });
-
-
-    // WebRTC Signaling
-    socket.on('webrtc_offer', (data) => {
-        const recipientSocket = userSockets[data.recipient_username];
-        if (recipientSocket) {
-            io.to(recipientSocket).emit('webrtc_offer', {
-                sdp: data.sdp,
-                sender_username: data.sender_username
+        const recipientSocketId = userSockets[recipient_username];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('new_message', {
+                recipient_username,
+                sender_username,
+                text
             });
+            console.log(`Message sent to ${recipient_username}`);
+        } else {
+            console.log(`Recipient ${recipient_username} not found.`);
         }
-    });
 
-    socket.on('webrtc_answer', (data) => {
-        const recipientSocket = userSockets[data.recipient_username];
-        if (recipientSocket) {
-            io.to(recipientSocket).emit('webrtc_answer', {
-                sdp: data.sdp,
-                sender_username: data.sender_username
-            });
-        }
+        console.log("userSockets", userSockets)
     });
+    
 
-    socket.on('webrtc_ice_candidate', (data) => {
-        const recipientSocket = userSockets[data.recipient_username];
-        if (recipientSocket) {
-            io.to(recipientSocket).emit('webrtc_ice_candidate', {
-                candidate: data.candidate,
-                sender_username: data.sender_username
-            });
-        }
-    });
+    // WebRTC
 
+    socket.emit("connection-success", {
+        status: "connection-success",
+        socketId: socket.id,
+    })
+
+
+    socket.on("sdp", (data) => {
+        // console.log(data)
+        socket.broadcast.emit("sdp", data)
+    })
+
+
+    // socket.on("sdp_answer", (data) => {
+    //     console.log("answer______________", data)
+        
+    // })
+
+    socket.on("candidate", data => {
+        console.log("candidate",data)
+        socket.broadcast.emit("candidate", data)
+
+    })
+    
+  
+
+    // User disconnection
     socket.on('disconnect', () => {
-        // Remove socket ID from userSockets
         for (let username in userSockets) {
             if (userSockets[username] === socket.id) {
                 delete userSockets[username];
+                console.log(`User ${username} disconnected`);
                 break;
             }
         }

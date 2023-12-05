@@ -58,10 +58,10 @@ const loginUserQuery = async ({ username, password }) => {
 const getUsersQuery = async () => {
   try {
     const result = await db.query("SELECT * FROM users");
-    console.log("Database query result:", result);
+    // console.log("Database query result:", result);
     return result;
   } catch (error) {
-    console.error("Error fetching users:", error);
+    // console.error("Error fetching users:", error);
     throw error;
   }
 };

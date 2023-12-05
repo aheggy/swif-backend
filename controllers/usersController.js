@@ -52,7 +52,7 @@ const usersController = {
   people: async (req, res) => {
     try {
       const users = await getUsersQuery();
-      console.log('Sending users:', users); 
+      // console.log('Sending users:', users); 
       res.json(users);
     } catch (err) {
       console.error(err.message);
