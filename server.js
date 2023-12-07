@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 
 
     socket.on("sdp", (data) => {
-        // console.log(data)
+        console.log(data)
         socket.broadcast.emit("sdp", data)
     })
 
@@ -80,6 +80,8 @@ io.on('connection', (socket) => {
 
     })
     
+
+
   
 
     // User disconnection
