@@ -57,32 +57,46 @@ io.on('connection', (socket) => {
 
     // WebRTC
 
-    socket.emit("connection-success", {
-        status: "connection-success",
-        socketId: socket.id,
-    })
+    // socket.emit("connection-success", {
+    //     status: "connection-success",
+    //     socketId: socket.id,
+    // })
+
+
+    // socket.on("sdp", (data) => {
+    //     console.log(data)
+    //     socket.broadcast.emit("sdp", data)
+    // })
+    
+    // socket.on("candidate", data => {
+    //     console.log("candidate",data)
+    //     socket.broadcast.emit("candidate", data)
+
+    // })
 
 
     socket.on("sdp", (data) => {
         console.log(data)
-        socket.broadcast.emit("sdp", data)
-    })
+        const { sdp, sender, recipient } = data;
+        const recipientSocketId = userSockets[recipient];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("sdp", { sdp, sender: sender, recipient: recipient });
+        }
+    });
 
 
-    // socket.on("sdp_answer", (data) => {
-    //     console.log("answer______________", data)
-        
-    // })
+    socket.on("candidate", (data) => {
+        console.log("######################")
 
-    socket.on("candidate", data => {
-        console.log("candidate",data)
-        socket.broadcast.emit("candidate", data)
+        console.log("received candidate",data)
+        const { candidate, sender, recipient } = data;
+        const recipientSocketId = userSockets[recipient];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("candidate", { candidate });
+        }
 
-    })
-    
+    });
 
-
-  
 
     // User disconnection
     socket.on('disconnect', () => {
