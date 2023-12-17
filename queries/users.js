@@ -23,7 +23,6 @@ const createUserQuery = async ({
       "INSERT INTO users (first_name, last_name, username, password_hash) VALUES ($1, $2, $3, $4) RETURNING username",
       [first_name, last_name, username, hashedPassword]
     );
-
     return newUser;
   } catch (error) {
     throw error;
@@ -66,4 +65,15 @@ const getUsersQuery = async () => {
   }
 };
 
-module.exports = { createUserQuery, loginUserQuery, getUsersQuery };
+const getOneUserQuery = async ({username}) => {
+  try {
+    const result = await db.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = { createUserQuery, loginUserQuery, getUsersQuery, getOneUserQuery };
