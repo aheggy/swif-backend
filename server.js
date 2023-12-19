@@ -1,9 +1,9 @@
 // DEPENDENCIES
+const app = require("./app.js");
 const http = require('http');
 const socketIO = require('socket.io');
-const app = require("./app.js");
-const {createMessageQuery} = require("./queries/messages"); 
-const { version } = require('os');
+// const {createMessageQuery} = require("./queries/messages"); 
+// const { version } = require('os');
 
 // CONFIGURATION
 require("dotenv").config();
@@ -12,15 +12,17 @@ const PORT = process.env.PORT || 3000;
 // SERVER
 const server = http.createServer(app);
 const io = socketIO(server, {
-  cors: {
-    origin: 'https://swif.onrender.com/', // Frontend URL
-    methods: ['GET', 'POST'],
-    credentials: true
-  }
-});
+    cors: {
+        // origin: 'http://localhost:3000',
+      origin: 'https://swif.onrender.com', // Front-end application's URL
+      methods: ['GET', 'POST'],
+      credentials: true
+    }
+  });
 
 // SOCKET.IO EVENT LISTENERS
 const userSockets = {};  // Object to map usernames to socket IDs
+
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 

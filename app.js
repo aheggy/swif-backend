@@ -1,6 +1,8 @@
 // DEPENDENCIES
-const cors = require("cors");
 const express = require("express");
+const cors = require("cors");
+const http = require('http');
+const socketIO = require('socket.io');
 const usersController = require("./controllers/usersController.js");
 const messagesController = require("./controllers/messagesController.js");
 
@@ -9,9 +11,11 @@ const app = express();
 
 // MIDDLEWARE
 app.use(cors({
-  origin: 'https://swif.onrender.com/', // Frontend URL
+  // origin: 'http://localhost:3000', // Frontend URL
+  origin: 'https://swif.onrender.com', // Frontend URL
   credentials: true
 }));
+
 app.use(express.json());
 
 // ROUTES
