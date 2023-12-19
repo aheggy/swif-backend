@@ -3,7 +3,7 @@ const app = require("./app.js");
 const http = require('http');
 const socketIO = require('socket.io');
 // const {createMessageQuery} = require("./queries/messages"); 
-// const { version } = require('os');
+const { version } = require('os');
 
 // CONFIGURATION
 require("dotenv").config();
@@ -43,11 +43,11 @@ io.on('connection', (socket) => {
 
     socket.on('heartbeat', (data) => {
         const { username } = data;
-
-        userSockets[username] = true;
-        socket.broadcast.emit('user_status_change', { username, isOnline: true });
-        console.log(`Heartbeat received from ${username}`);
-
+        if (userSockets[username]) {
+            userSockets[username].isOnline = true;
+            console.log(`Heartbeat received from ${username}`);
+            socket.broadcast.emit('user_status_change', { username, isOnline: true });
+        }
     });
 
     // Sending a new message
