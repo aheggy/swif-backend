@@ -9,7 +9,7 @@ const app = express();
 
 // MIDDLEWARE
 app.use(cors({
-  origin: 'https://swif-express.onrender.com', // Frontend URL
+  origin: 'https://swif.onrender.com/', // Frontend URL
   credentials: true
 }));
 app.use(express.json());

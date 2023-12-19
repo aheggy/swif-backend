@@ -12,11 +12,11 @@ const PORT = process.env.PORT || 3000;
 // SERVER
 const server = http.createServer(app);
 const io = socketIO(server, {
-    cors: {
-        origin: 'https://swif.onrender.com', //Frontend's URL
-        methods: ['GET', 'POST'],
-        credentials: true,
-    },
+  cors: {
+    origin: 'https://swif.onrender.com/', // Frontend URL
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
 });
 
 // SOCKET.IO EVENT LISTENERS
