@@ -9,7 +9,7 @@ const app = express();
 
 // MIDDLEWARE
 app.use(cors({
-  origin: 'https://swif.onrender.com', // Frontend URL
+  origin: 'https://swif-express.onrender.com', // Frontend URL
   credentials: true
 }));
 app.use(express.json());
@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
 
 app.post("/signup", usersController.createUser);
 app.post("/login", usersController.loginUser);
+app.get("/user/:username", usersController.user);
 app.get("/people", usersController.people);
 app.post('/messages', usersController.authenticateToken, messagesController.createMessage);
 app.get('/messages', usersController.authenticateToken, messagesController.getMessagesForUser);

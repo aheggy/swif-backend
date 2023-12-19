@@ -62,7 +62,7 @@ const usersController = {
 
 
   user: async (req, res) => {
-    const { username } = req.body;
+    const { username } = req.params;
     console.log("user name for one query is ", req.body)
     try {
       const user = await getOneUserQuery({username});

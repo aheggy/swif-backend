@@ -65,7 +65,7 @@ const getUsersQuery = async () => {
   }
 };
 
-const getOneUserQuery = async ({username}) => {
+const getOneUserQuery = async ({ username }) => {
   try {
     const result = await db.query("SELECT * FROM users WHERE username = $1", [
       username,
