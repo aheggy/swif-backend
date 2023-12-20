@@ -41,14 +41,18 @@ io.on('connection', (socket) => {
         socket.emit('registration_successful', `Registered as ${username}`);
     });
 
-    socket.on('heartbeat', (data) => {
-        const { username } = data;
-        if (userSockets[username]) {
-            userSockets[username].isOnline = true;
-            console.log(`Heartbeat received from ${username}`);
-            socket.broadcast.emit('user_status_change', { username, isOnline: true });
-        }
-    });
+socket.on('heartbeat', (data) => {
+  const { username } = data;
+  console.log(`Heartbeat event received from ${username}`);
+  if (userSockets[username]) {
+    userSockets[username].isOnline = true;
+    console.log(`Updated online status for ${username}`);
+    socket.broadcast.emit('user_status_change', { username, isOnline: true });
+  } else {
+    console.log(`Username ${username} not found in userSockets`);
+  }
+});
+
 
     // Sending a new message
     socket.on('new_message', (data) => {
