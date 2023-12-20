@@ -1,8 +1,9 @@
 // DEPENDENCIES
+const app = require("./app.js");
 const http = require('http');
 const socketIO = require('socket.io');
-const app = require("./app.js");
-const {createMessageQuery} = require("./queries/messages"); 
+// const {createMessageQuery} = require("./queries/messages"); 
+const { version } = require('os');
 
 // CONFIGURATION
 require("dotenv").config();
@@ -11,85 +12,111 @@ const PORT = process.env.PORT || 3000;
 // SERVER
 const server = http.createServer(app);
 const io = socketIO(server, {
-  cors: {
-    origin: 'https://swif.onrender.com',
-    methods: ['GET', 'POST'],
-    credentials: true
-  }
-});
+    cors: {
+        // origin: 'http://localhost:3000',
+      origin: 'https://swif.onrender.com', // Front-end application's URL
+      methods: ['GET', 'POST'],
+      credentials: true
+    }
+  });
 
 // SOCKET.IO EVENT LISTENERS
 const userSockets = {};  // Object to map usernames to socket IDs
 
 io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+    console.log('A user connected:', socket.id);
 
+    // User registration
     socket.on('register', (username) => {
-        userSockets[username] = socket.id;
+        console.log(`Registering user: ${username} with socket ID: ${socket.id}`);
+        // userSockets[username] = socket.id;
+        userSockets[username] = { socketId: socket.id, isOnline: true };
+        // Broadcast the user's online status to other users
+        socket.broadcast.emit('user_status_change', { username, isOnline: true });
+
+
+        console.log(userSockets)
+
+       
+        socket.emit('registration_successful', `Registered as ${username}`);
     });
 
-    socket.on('new_message', async (data) => {
+    socket.on('heartbeat', (data) => {
+        const { username } = data;
+        if (userSockets[username]) {
+            userSockets[username].isOnline = true;
+            console.log(`Heartbeat received from ${username}`);
+            socket.broadcast.emit('user_status_change', { username, isOnline: true });
+        }
+    });
+
+    // Sending a new message
+    socket.on('new_message', (data) => {
         const { sender_username, recipient_username, text } = data;
+        console.log(`Received message from ${sender_username} to ${recipient_username}: ${text}`);
+        console.log("userSockets", userSockets);
 
-        try {
-            const savedMessage = await createMessageQuery(sender_username, recipient_username, text);
-            console.log('Emitting message:', savedMessage);
+        // const recipientSocketId = userSockets[recipient_username];
+        const recipientSocketId = userSockets[recipient_username]?.socketId;
 
-            const senderSocket = userSockets[sender_username];
-            const recipientSocket = userSockets[recipient_username];
-
-            if (senderSocket) {
-                io.to(senderSocket).emit('new_message', savedMessage);
-            }
-            if (recipientSocket) {
-                io.to(recipientSocket).emit('new_message', savedMessage);
-            }
-        } catch (error) {
-            console.error('Error saving message:', error);
-        }
-    });
-
-
-    // WebRTC Signaling
-    socket.on('webrtc_offer', (data) => {
-        const recipientSocket = userSockets[data.recipient_username];
-        if (recipientSocket) {
-            io.to(recipientSocket).emit('webrtc_offer', {
-                sdp: data.sdp,
-                sender_username: data.sender_username
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('new_message', {
+                recipient_username,
+                sender_username,
+                text
             });
+            console.log(`Message sent to ${recipient_username}`);
+        } else {
+            console.log(`Recipient ${recipient_username} not found.`);
+        }
+
+        console.log("userSockets", userSockets)
+    });
+    
+
+    socket.on("sdp", (data) => {
+        console.log(data)
+        const { sdp, sender, recipient } = data;
+        // const recipientSocketId = userSockets[recipient];
+        const recipientSocketId = userSockets[recipient]?.socketId;
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("sdp", { sdp, sender: sender, recipient: recipient });
         }
     });
 
-    socket.on('webrtc_answer', (data) => {
-        const recipientSocket = userSockets[data.recipient_username];
-        if (recipientSocket) {
-            io.to(recipientSocket).emit('webrtc_answer', {
-                sdp: data.sdp,
-                sender_username: data.sender_username
-            });
+
+    socket.on("candidate", (data) => {
+        console.log("######################")
+
+        console.log("received candidate",data)
+        const { candidate, sender, recipient } = data;
+        // const recipientSocketId = userSockets[recipient];
+        const recipientSocketId = userSockets[recipient]?.socketId;
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("candidate", { candidate });
         }
+
     });
 
-    socket.on('webrtc_ice_candidate', (data) => {
-        const recipientSocket = userSockets[data.recipient_username];
-        if (recipientSocket) {
-            io.to(recipientSocket).emit('webrtc_ice_candidate', {
-                candidate: data.candidate,
-                sender_username: data.sender_username
-            });
-        }
-    });
 
+    // User disconnection
     socket.on('disconnect', () => {
-        // Remove socket ID from userSockets
-        for (let username in userSockets) {
-            if (userSockets[username] === socket.id) {
-                delete userSockets[username];
-                break;
-            }
+    let disconnectedUser = null;
+    for (let username in userSockets) {
+        if (userSockets[username].socketId === socket.id) {
+            disconnectedUser = username;
+            userSockets[username].isOnline = false;
+            console.log(`User ${username} disconnected`);
+            break;
         }
-        console.log('Client disconnected:', socket.id);
+    }
+    
+    // Broadcast the user's offline status to other users
+    if (disconnectedUser) {
+        socket.broadcast.emit('user_status_change', { username: disconnectedUser, isOnline: false });
+    }
+
+    console.log('Client disconnected:', socket.id);
     });
 });
 

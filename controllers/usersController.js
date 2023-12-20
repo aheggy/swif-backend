@@ -2,7 +2,7 @@ const users = require('../queries/users');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { createUserQuery, loginUserQuery, getUsersQuery } = require("../queries/users");
+const { createUserQuery, loginUserQuery, getUsersQuery, getOneUserQuery } = require("../queries/users");
 
 const usersController = {
   
@@ -52,13 +52,26 @@ const usersController = {
   people: async (req, res) => {
     try {
       const users = await getUsersQuery();
-      console.log('Sending users:', users); 
+      // console.log('Sending users:', users); 
       res.json(users);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
   },
+
+
+  user: async (req, res) => {
+    const { username } = req.params;
+    console.log("user name for one query is ", req.body)
+    try {
+      const user = await getOneUserQuery({username});
+      res.status(200).json(user)
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).send("server error")
+    }
+  } 
 
 };
 
