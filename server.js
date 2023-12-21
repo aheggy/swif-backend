@@ -43,13 +43,13 @@ io.on('connection', (socket) => {
 
 socket.on('heartbeat', (data) => {
   const { username } = data;
-  console.log(`Heartbeat event received from ${username}`);
+//   console.log(`Heartbeat event received from ${username}`);
   if (userSockets[username]) {
     userSockets[username].isOnline = true;
-    console.log(`Updated online status for ${username}`);
+    // console.log(`Updated online status for ${username}`);
     socket.broadcast.emit('user_status_change', { username, isOnline: true });
   } else {
-    console.log(`Username ${username} not found in userSockets`);
+    // console.log(`Username ${username} not found in userSockets`);
   }
 });
 
