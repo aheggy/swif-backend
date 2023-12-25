@@ -102,6 +102,19 @@ socket.on('heartbeat', (data) => {
 
     });
 
+    socket.on('drawing', (data) => {
+        const recipientSocketId = userSockets[data.recipient]?.socketId;
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('drawing', data);
+        }
+    });
+
+    socket.on('clear_canvas', (data) => {
+        const recipientSocketId = userSockets[data.recipient]?.socketId;
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('clear_canvas');
+        }
+    });
 
     // User disconnection
     socket.on('disconnect', () => {

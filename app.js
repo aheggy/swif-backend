@@ -5,6 +5,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const usersController = require("./controllers/usersController.js");
 const messagesController = require("./controllers/messagesController.js");
+const subjectsController = require("./controllers/subjectsController.js")
 
 // CONFIGURATION
 const app = express();
@@ -29,6 +30,7 @@ app.get("/user/:username", usersController.user);
 app.get("/people", usersController.people);
 app.post('/messages', usersController.authenticateToken, messagesController.createMessage);
 app.get('/messages', usersController.authenticateToken, messagesController.getMessagesForUser);
+app.get('/subjects', subjectsController.getAllSubjects)
 
 // 404 PAGE
 app.get("*", (req, res) => {
