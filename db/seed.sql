@@ -86,4 +86,4 @@ VALUES
 
 INSERT INTO messages (sender_id, receiver_id, message_content, timestamp)
 VALUES  (1, 2, 'Hello, how are you?', '2023-10-26 15:30:00'),
-        (2, 1, "I'm fine, Thank you', '2023-10-26 15:31:00");
+        (2, 1, "I'm fine, Thank you", '2023-10-26 15:31:00');
