@@ -37,6 +37,7 @@ CREATE TABLE messages (
 CREATE TABLE subjects (
   subject_id SERIAL PRIMARY KEY,
   subject_name TEXT,
+  image_url TEXT,
   description TEXT
 );
 

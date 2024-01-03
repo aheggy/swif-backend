@@ -1,4 +1,4 @@
--- \c swif_db
+\c swif_db
 
 -- INSERT INTO users (first_name, last_name, username, email, gender, age, country, city, profile_image_url, bio, contact_info, subject_interest)
 -- VALUES
@@ -23,17 +23,59 @@
 --     ('Isabel', 'Martinez', 'isabelmartinez', 'isabelmartinez@swifmail.com', 'Non-binary', 24, 'Mexico', 'Mexico City', 'https://drive.google.com/file/d/1yDvCI7niO7Z3JQOAG7F0l4hr-hBygLsN/view?usp=drive_link', 'Nature lover and environmental activist.', '416-123-4567', 'Environmentalism');
 
 
--- INSERT INTO subjects (subject_name, description) VALUES 
---     ('Calculus', 'Description of Calculus subject'),
---     ('Algebra', 'Description of Algebra subject'),
---     ('Data Structures', 'Description of Data Structures subject'),
---     ('Algorithms', 'Description of Algorithms subject'),
---     ('Computer Networks', 'Description of Computer Networks subject'),
---     ('Cybersecurity', 'Description of Cybersecurity subject'),
---     ('Ecology', 'Description of Ecology subject'),
---     ('Genetics', 'Description of Genetics subject'),
---     ('Artificial Intelligence', 'Description of Artificial Intelligence subject'),
---     ('Biochemistry', 'Description of Biochemistry subject');
+INSERT INTO
+    subjects (subject_name, description, image_url)
+VALUES
+    (
+        'MATHEMATICS',
+        'The study of numbers, quantities, and shapes.',
+        'https://drive.google.com/uc?id=152dWr3JbdqP0_HbcRgh4a9ud_x25kJCZ'
+    ),
+    (
+        'SCIENCE',
+        'The systematic enterprise that builds and organizes knowledge in the form of testable explanations and predictions about the universe.',
+        'https://drive.google.com/uc?id=1wZ37q7xgroSa8uE8qmkpZR6maEptYTPu'
+    ),
+    (
+        'GEOGRAPHY',
+        'The study of the Earth''s physical features and the distribution of plants, animals, and human populations.',
+        'https://drive.google.com/uc?id=1eqptY9QWfE0cSCg6hZCekIvknjBe4ruY'
+    ),
+    (
+        'HISTORY',
+        'The study of past events, particularly in human affairs.',
+        'https://drive.google.com/uc?id=1IAXfNBC-TQcJ4HMl3LSdqj7X1RO30wHq'
+    ),
+    (
+        'SOCIAL STUDIES',
+        'An interdisciplinary field that combines elements of history, geography, political science, economics, and sociology.',
+        'https://drive.google.com/uc?id=1XJSMxX5C5oWmNrgA1CUKwDLa84Jpz0ip'
+    ),
+    (
+        'ART',
+        'The expression or application of human creative skill and imagination, typically in a visual form.',
+        'https://drive.google.com/uc?id=1pVFghf6pCRCqADiRj21FXb6eED4w68vg'
+    ),
+    (
+        'MUSIC',
+        'The art of arranging sounds in time to produce a composition.',
+        'https://drive.google.com/uc?id=1wvVRqDdYFCn6xVM7OPNrbbtzKot5U_Oi'
+    ),
+    (
+        'COMPUTER SCIENCE',
+        'The study of computers and computing technologies.',
+        'https://drive.google.com/uc?id=1d9SkTz1IXT6JsdYdroTiif4z--k1XsOx'
+    ),
+    (
+        'LANGUAGES',
+        'The method of human communication, either spoken or written, consisting of the use of words in a structured and conventional way.',
+        'https://drive.google.com/uc?id=10gTZmARL0VurFm28os62I8C6fNEhBJAI'
+    ),
+    (
+        'LITERATURE',
+        'Written works, especially those considered of superior or lasting artistic merit.',
+        'https://drive.google.com/uc?id=12rm_QnuKDN8EFi40oSOcCFDXkZ534lyS'
+    );
 
 
 -- INSERT INTO study_sessions (user1_id, user2_id, subject_id, start_time, end_time, status)
@@ -44,4 +86,4 @@
 
 INSERT INTO messages (sender_id, receiver_id, message_content, timestamp)
 VALUES  (1, 2, 'Hello, how are you?', '2023-10-26 15:30:00'),
-        (2, 1, "I'm fine, Thank you", '2023-10-26 15:31:00');
+        (2, 1, "I'm fine, Thank you', '2023-10-26 15:31:00");
