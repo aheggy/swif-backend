@@ -1,8 +1,22 @@
 -- \c swif_db
 
--- INSERT INTO users (first_name, last_name, username, email, gender, age, country, city, profile_image_url, bio, contact_info, subject_interest)
--- VALUES
---     ('Marc', 'Spector', 'sunbishop', 'marcspector@swifmail.com', 'Male', 21, 'USA', 'Chicago', 'https://drive.google.com/file/d/1PmtAQULVpV0P8DOXxfG2NtSiTcE0aRJ6/view?usp=drive_link', 'Scared of snakes, but trying to learn Python.', '646-123-4567', 'Python'),
+
+UPDATE users 
+SET 
+    gender = 'female', 
+    age = 22, 
+    country = 'USA', 
+    profile_image_url = 'https://images.unsplash.com/photo-1520980250952-9cc96cd79aa0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 
+    bio = 'Soccer fan and fitness enthusiast.', 
+    contact_info = 'davidlee@swifmail.com', 
+    subject_interest = 'Robotics' 
+WHERE 
+    username = 'jessica';
+
+
+
+
+
 
 --     ('Jessica', 'Drew', 'atelegs', 'jdrew@swifmail.com', 'Female', 25, 'UK', 'London', 'https://drive.google.com/file/d/1XSAX5uW-1gMHp18nb1KEhzh86lyZ9eTJ/view?usp=drive_link', 'Extremely passionate about web development.', '917-123-4567', 'Python'),
 
@@ -23,17 +37,17 @@
 --     ('Isabel', 'Martinez', 'isabelmartinez', 'isabelmartinez@swifmail.com', 'Non-binary', 24, 'Mexico', 'Mexico City', 'https://drive.google.com/file/d/1yDvCI7niO7Z3JQOAG7F0l4hr-hBygLsN/view?usp=drive_link', 'Nature lover and environmental activist.', '416-123-4567', 'Environmentalism');
 
 
--- INSERT INTO subjects (subject_name, description) VALUES 
---     ('Calculus', 'Description of Calculus subject'),
---     ('Algebra', 'Description of Algebra subject'),
---     ('Data Structures', 'Description of Data Structures subject'),
---     ('Algorithms', 'Description of Algorithms subject'),
---     ('Computer Networks', 'Description of Computer Networks subject'),
---     ('Cybersecurity', 'Description of Cybersecurity subject'),
---     ('Ecology', 'Description of Ecology subject'),
---     ('Genetics', 'Description of Genetics subject'),
---     ('Artificial Intelligence', 'Description of Artificial Intelligence subject'),
---     ('Biochemistry', 'Description of Biochemistry subject');
+INSERT INTO subjects (subject_name, description) VALUES 
+    ('Calculus_1', 'Description of Calculus_1 subject'),
+    ('Algebra', 'Description of Algebra subject'),
+    ('Data_Structures', 'Description of Data Structures subject'),
+    ('Algorithms', 'Description of Algorithms subject'),
+    ('Computer_Networks', 'Description of Computer Networks subject'),
+    ('Cybersecurity', 'Description of Cybersecurity subject'),
+    ('Ecology', 'Description of Ecology subject'),
+    ('Genetics', 'Description of Genetics subject'),
+    ('Artificial_Intelligence', 'Description of Artificial Intelligence subject'),
+    ('Biochemistry', 'Description of Biochemistry subject');
 
 
 -- INSERT INTO study_sessions (user1_id, user2_id, subject_id, start_time, end_time, status)

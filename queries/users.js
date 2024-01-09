@@ -76,4 +76,34 @@ const getOneUserQuery = async ({ username }) => {
   }
 };
 
-module.exports = { createUserQuery, loginUserQuery, getUsersQuery, getOneUserQuery };
+const updateUserQuery = async (username, userData) => {
+  try {
+      const result = await db.query(
+          `UPDATE users
+           SET first_name = $1, last_name = $2, gender = $3, age = $4, 
+               country = $5, city = $6, profile_image_url = $7, bio = $8, 
+               contact_info = $9, subject_interest = $10
+           WHERE username = $11`,
+          [
+              userData.firstName,
+              userData.lastName,
+              userData.gender,
+              userData.age,
+              userData.country,
+              userData.city,
+              userData.profileImage,
+              userData.bio,
+              userData.contactInfo,
+              userData.subjectInterests.join(','), 
+              username
+          ]
+      );
+      return result;
+  } catch (error) {
+      throw error;
+  }
+};
+
+
+
+module.exports = { createUserQuery, loginUserQuery, getUsersQuery, getOneUserQuery, updateUserQuery };

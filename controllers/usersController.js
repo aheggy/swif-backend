@@ -2,7 +2,7 @@ const users = require('../queries/users');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { createUserQuery, loginUserQuery, getUsersQuery, getOneUserQuery } = require("../queries/users");
+const { createUserQuery, loginUserQuery, getUsersQuery, getOneUserQuery, updateUserQuery } = require("../queries/users");
 
 const usersController = {
   
@@ -52,7 +52,7 @@ const usersController = {
   people: async (req, res) => {
     try {
       const users = await getUsersQuery();
-      // console.log('Sending users:', users); 
+      console.log('Sending users:', users); 
       res.json(users);
     } catch (err) {
       console.error(err.message);
@@ -71,7 +71,25 @@ const usersController = {
       console.error(error.message)
       res.status(500).send("server error")
     }
-  } 
+  },
+
+
+  updateUser: async (req, res) => {
+    const { username } = req.params;
+    const { firstName, lastName, gender, age, country, city, profileImage, bio, contactInfo, subjectInterests } = req.body;
+
+    try {
+        const userData = {
+            firstName, lastName, gender, age, country, city, profileImage, bio, contactInfo, subjectInterests
+        };
+        await updateUserQuery(username, userData);
+        res.status(200).json({ message: "User updated successfully" });
+    } catch (error) {
+        console.error("Error in updateUser:", error);
+        res.status(500).json({ error: error.message });
+    }
+  }
+
 
 };
 

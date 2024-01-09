@@ -1,4 +1,5 @@
 // DEPENDENCIES
+
 const express = require("express");
 const cors = require("cors");
 const http = require('http');
@@ -6,6 +7,7 @@ const socketIO = require('socket.io');
 const usersController = require("./controllers/usersController.js");
 const messagesController = require("./controllers/messagesController.js");
 const subjectsController = require("./controllers/subjectsController.js")
+
 
 // CONFIGURATION
 const app = express();
@@ -19,6 +21,8 @@ app.use(cors({
 
 app.use(express.json());
 
+
+
 // ROUTES
 app.get("/", (req, res) => {
   res.send("Welcome to the SWIF App");
@@ -26,11 +30,15 @@ app.get("/", (req, res) => {
 
 app.post("/signup", usersController.createUser);
 app.post("/login", usersController.loginUser);
-app.get("/user/:username", usersController.user);
 app.get("/people", usersController.people);
+app.get("/user/:username", usersController.user);
+app.put("/user/:username", usersController.updateUser);
 app.post('/messages', usersController.authenticateToken, messagesController.createMessage);
 app.get('/messages', usersController.authenticateToken, messagesController.getMessagesForUser);
 app.get('/subjects', subjectsController.getAllSubjects)
+
+
+
 
 // 404 PAGE
 app.get("*", (req, res) => {

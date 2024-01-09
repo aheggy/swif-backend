@@ -2,7 +2,7 @@
 const app = require("./app.js");
 const http = require('http');
 const socketIO = require('socket.io');
-// const {createMessageQuery} = require("./queries/messages"); 
+const {createMessageQuery} = require("./queries/messages"); 
 const { version } = require('os');
 
 // CONFIGURATION
@@ -37,31 +37,41 @@ io.on('connection', (socket) => {
 
         console.log(userSockets)
 
-       
         socket.emit('registration_successful', `Registered as ${username}`);
     });
 
-socket.on('heartbeat', (data) => {
-  const { username } = data;
-//   console.log(`Heartbeat event received from ${username}`);
-  if (userSockets[username]) {
-    userSockets[username].isOnline = true;
-    // console.log(`Updated online status for ${username}`);
-    socket.broadcast.emit('user_status_change', { username, isOnline: true });
-  } else {
-    // console.log(`Username ${username} not found in userSockets`);
-  }
-});
+      
+    socket.on('heartbeat', (data) => {
+    const { username } = data;
+    console.log(`Heartbeat event received from ${username}`);
+    if (userSockets[username]) {
+        userSockets[username].isOnline = true;
+        // console.log(`Updated online status for ${username}`);
+        console.log("sent status update to", username)
+
+        socket.broadcast.emit('user_status_change', { username, isOnline: true });
+    } else {
+        // console.log(`Username ${username} not found in userSockets`);
+    }
+    });
 
 
     // Sending a new message
-    socket.on('new_message', (data) => {
+    socket.on('new_message', async (data) => {
         const { sender_username, recipient_username, text } = data;
         console.log(`Received message from ${sender_username} to ${recipient_username}: ${text}`);
         console.log("userSockets", userSockets);
+            // store the message in the database
+        try {
+            await createMessageQuery(sender_username, recipient_username, text);
+            console.log(`Message stored in database from ${sender_username} to ${recipient_username}`);
+        } catch (error) {
+            console.error(`Error storing message in database: ${error.message}`);
+        }
 
         // const recipientSocketId = userSockets[recipient_username];
         const recipientSocketId = userSockets[recipient_username]?.socketId;
+
 
         if (recipientSocketId) {
             io.to(recipientSocketId).emit('new_message', {
@@ -88,10 +98,23 @@ socket.on('heartbeat', (data) => {
         }
     });
 
+    socket.on('track-info', (data) => {
+        const recipientSocketId = userSockets[data.recipient]?.socketId;
+        if (recipientSocketId) {
+          io.to(recipientSocketId).emit("track-info", { ...data });
+        }
+    });
+      
+    socket.on('screen-share-ended', (data) => {
+        const { sender, recipient } = data;
+        const recipientSocketId = userSockets[recipient]?.socketId;
+        if (recipientSocketId) {
+          io.to(recipientSocketId).emit('screen-share-ended', { sender });
+        }
+    });
+      
 
     socket.on("candidate", (data) => {
-        console.log("######################")
-
         console.log("received candidate",data)
         const { candidate, sender, recipient } = data;
         // const recipientSocketId = userSockets[recipient];
@@ -116,25 +139,39 @@ socket.on('heartbeat', (data) => {
         }
     });
 
+
+    socket.on('logout', (username) => {
+        if (userSockets[username] && userSockets[username].socketId === socket.id) {
+          console.log(`User ${username} logged out and disconnected.`);
+          delete userSockets[username]; // Remove user from the active connections
+          socket.disconnect(); 
+        }
+    });
+
+
+
     // User disconnection
     socket.on('disconnect', () => {
-    let disconnectedUser = null;
-    for (let username in userSockets) {
-        if (userSockets[username].socketId === socket.id) {
-            disconnectedUser = username;
-            userSockets[username].isOnline = false;
-            console.log(`User ${username} disconnected`);
-            break;
-        }
-    }
-    
-    // Broadcast the user's offline status to other users
-    if (disconnectedUser) {
-        socket.broadcast.emit('user_status_change', { username: disconnectedUser, isOnline: false });
-    }
+        let disconnectedUser = null;
+        for (let username in userSockets) {
+            if (userSockets[username].socketId === socket.id) {
+                disconnectedUser = username;
+                console.log(`User ${username} disconnected`);
 
-    console.log('Client disconnected:', socket.id);
+                // Update the user's online status
+                userSockets[username].isOnline = false;
+
+                socket.broadcast.emit('user_status_change', { username, isOnline: false });
+                delete userSockets[username];
+
+                break;
+            }
+        }
+
+        console.log('Client disconnected:', socket.id);
     });
+
+
 });
 
 

@@ -3,12 +3,11 @@ DROP DATABASE IF EXISTS swif_db;
 CREATE DATABASE swif_db;
 
 \c swif_db
--- DROP TABLE IF EXISTS users;
--- DROP TABLE IF EXISTS messages;
+
+-- DROP TABLE IF EXISTS user_subject_connections;
 -- DROP TABLE IF EXISTS subjects;
--- DROP TABLE IF EXISTS study_sessions;
--- DROP TABLE IF EXISTS connections;
--- DROP TABLE IF EXISTS user_subjects;
+-- DROP TABLE IF EXISTS messages;
+-- DROP TABLE IF EXISTS users;
 
 
 CREATE TABLE users (
@@ -23,7 +22,7 @@ CREATE TABLE users (
   profile_image_url TEXT,
   bio TEXT,
   contact_info TEXT,
-  subject_interest INTEGER
+  subject_interest TEXT
 );
 
 CREATE TABLE messages (
@@ -42,8 +41,8 @@ CREATE TABLE subjects (
 
 
 CREATE TABLE user_subject_connections (
+  PRIMARY KEY (user_id, subject_id),
   user_id TEXT REFERENCES users(username),
-  subject_id INTEGER REFERENCES subjects(subject_id),
-  PRIMARY KEY (user_id, subject_id)
+  subject_id INTEGER REFERENCES subjects(subject_id)
 );
 
