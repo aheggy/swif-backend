@@ -1,17 +1,11 @@
 -- \c swif_db
 
 
-UPDATE users 
+UPDATE subjects 
 SET 
-    gender = 'female', 
-    age = 22, 
-    country = 'USA', 
-    profile_image_url = 'https://images.unsplash.com/photo-1520980250952-9cc96cd79aa0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 
-    bio = 'Soccer fan and fitness enthusiast.', 
-    contact_info = 'davidlee@swifmail.com', 
-    subject_interest = 'Robotics' 
+    icon_url = 'https://cdn.britannica.com/99/152199-138-4BB47843/genetics-James-Watson-study-Francis-Crick-structure.jpg?w=800&h=450&c=crop'
 WHERE 
-    username = 'jessica';
+    subject_name = 'Genetics';
 
 
 
