@@ -13,8 +13,8 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = socketIO(server, {
     cors: {
-        // origin: 'http://localhost:3000',
-      origin: 'https://swif.onrender.com', // Front-end application's URL
+        origin: 'http://localhost:3000',
+    //   origin: 'https://swif.onrender.com', // Front-end application's URL
       methods: ['GET', 'POST'],
       credentials: true
     }
