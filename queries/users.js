@@ -56,7 +56,7 @@ const loginUserQuery = async ({ username, password }) => {
 
 const getUsersQuery = async () => {
   try {
-    const result = await db.query("SELECT * FROM users");
+    const result = await db.query("SELECT * FROM users ORDER BY first_name ASC");
     // console.log("Database query result:", result);
     return result;
   } catch (error) {
